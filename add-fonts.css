@@ -26,6 +26,15 @@
     margin-bottom: 40vh;
   }
 
+ ul.nav {
+  display: none;
+}
+
+/* 原来为导航条预留的上边距去掉，不然会有空白 */
+#scrollytelling-text {
+  padding-top: 100vh;   /* 原来是 calc(100vh + 70px) */
+}
+
 
     #scrollytelling-text .step.mobile-hidden {
     opacity: 0;
