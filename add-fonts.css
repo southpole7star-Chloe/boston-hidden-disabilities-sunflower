@@ -1,0 +1,769 @@
+/* ----------------------  LOAD FONTS FROM SERVER ------------------------------ */
+@font-face {
+ font-family: "GrotzecCond-Demibold";
+  src: url(https://journalismdesign.camd.northeastern.edu/clean/fonts/GrotzecCond-Demibold3.woff2);
+}  
+@font-face {
+ font-family: "GrotzecCond-DemiboldItalic";
+  src: url(https://journalismdesign.camd.northeastern.edu/clean/fonts/GrotzecCond-DemiboldItalic.woff2);
+}  
+@font-face {
+ font-family: "LeJeunePoster-Regular";
+  src: url(https://journalismdesign.camd.northeastern.edu/clean/fonts/LeJeunePoster-Regular.woff2);
+} 
+@font-face {
+ font-family: "LeJeunePoster-RegularItalic";
+  src: url(https://journalismdesign.camd.northeastern.edu/clean/fonts/LeJeunePoster-RegularItalic.woff2);
+}
+
+/* ========================================================= */
+/* 手机布局（<= 600px）                                     */
+/* ========================================================= */
+@media only screen and (max-width: 600px) {
+
+#scrollytelling-text .step[data-step="lanyard"] {
+    height: 120vh;
+    margin-bottom: 40vh;
+  }
+
+
+    #scrollytelling-text .step.mobile-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* 让正文变宽：左右只留 4% 的白边 */
+  h1, h2, h3, p {
+    padding: 0 4%;
+  }
+
+  h1 { font-size: 28px; }
+  h2 { font-size: 20px; }
+  p  { font-size: 16px; }
+
+  /* blockquote 跟正文一样宽 */
+  blockquote {
+    max-width: 92%;
+    padding: 20px 16px;
+  }
+
+  /* sunflower 圆形图不 float，避免挤窄文本 */
+  .sunflower-side .side-image {
+    float: none;
+    display: block;
+    margin: 0 auto 12px auto;
+    width: 120px;
+    height: 120px;
+  }
+
+  /* 图片几乎占满屏幕 */
+  figure,
+  figure.text-width {
+    width: 92%;
+    max-width: 92%;
+  }
+
+  /* 让 scrollama 卡片变宽，文字不挤 */
+  #scrollytelling-text .step {
+    width: 92%;
+    max-width: none;
+    margin: 0 auto 60vh;
+    padding: 20px 16px !important;
+    border-radius: 18px;
+    top: 45vh;
+  }
+
+  /* intro 队伍：缩小到手机能看到完整 */
+  #queue-container {
+    display: flex;
+    align-items: flex-end; 
+    transform: scale(1.5); 
+    position: relative; 
+    justify-content: center; 
+    z-index: 150;     
+}
+
+  #line-left,
+  #line-right,
+  #hannah-container,
+  #staff-image {
+    height: 220px;
+  }
+
+  #staff-image {
+    transform: translateX(40px);
+  }
+
+  #staff-speech {
+    bottom: 220px;
+    left: 55%;
+    font-size: 14px;
+  }
+}
+
+
+/* ========================================================= */
+/* 终极手机样式覆盖（<= 600px）                              */
+/* ========================================================= */
+@media only screen and (max-width: 600px) {
+
+  /* 正文变宽：左右只留 3%～4% 的白边 */
+  h1, h2, h3, p {
+    padding: 0 4% !important;
+  }
+
+  h1 { font-size: 28px !important; }
+  h2 { font-size: 20px !important; }
+  p  { font-size: 16px !important; }
+
+  /* quote 跟正文一样宽 */
+  blockquote {
+    max-width: 92% !important;
+    margin: 30px auto !important;
+    padding: 20px 16px !important;
+  }
+
+  /* sunflower 圆图：手机上变成上图下文，避免挤窄文本 */
+  .sunflower-side .side-image {
+    float: none !important;
+    display: block !important;
+    margin: 0 auto 12px auto !important;
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  /* 图片几乎占满屏幕 */
+  figure,
+  figure.text-width {
+    width: 92% !important;
+    max-width: 92% !important;
+  }
+
+  /* scrollama 卡片变宽，不再像一条竖条 */
+  #scrollytelling-text .step {
+    width: 92% !important;
+    max-width: none !important;
+    margin: 0 auto 60vh !important;
+    padding: 20px 16px !important;
+    border-radius: 18px !important;
+    top: 45vh !important;
+  }
+
+  /* intro 队伍：整体缩小，让手机能看到完整队伍 */
+  #queue-container {
+    transform: scale(0.7) !important;
+    transform-origin: center bottom !important;
+  }
+
+  #line-left,
+  #line-right,
+  #hannah-container,
+  #staff-image {
+    height: 220px !important;
+  }
+
+  #staff-image {
+    transform: translateX(40px) !important;
+  }
+
+  #staff-speech {
+    bottom: 220px !important;
+    left: 55% !important;
+    font-size: 14px !important;
+  }
+}
+
+
+
+
+/* ----------------------  SITE STYLES  ------------------------------------- */
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/*NAV BAR*/
+
+ul.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 64px;              /* ✅ 关键：锁死高度 */
+  background-color: #ffd200;
+  z-index: 200;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  justify-items: center;
+  padding: 0;                /* ✅ 删 padding，避免撑高 */
+  margin: 0;
+  list-style: none;
+}
+
+ul.nav li{
+    float: none;
+}
+
+ul.nav li.logo{
+    position: static;
+}
+
+
+/* ✅ 修复3: 为 <a> 添加基础样式 (如 display: block) */
+/* 这能让汉堡包图标的点击区域更大 */
+ul.nav li a {
+    display: block;
+    padding: 0 6px;
+}
+
+
+ul.nav li a:link{
+    text-decoration: none;
+    color: white; /* (这就是导致"白底白字"的规则) */
+}
+ul.nav li a:visited {
+    color: white; /* (这也是导致"白底白字"的规则) */
+}
+
+/* --- 下面是修复下拉菜单的关键 --- */
+
+/* ✅ 修复4: 添加 .dropdowncontent "方框" 本身的基础样式 */
+/* (老师的版本里缺失了这一部分) */
+.dropdowncontent {
+    display: none; /* 默认隐藏 */
+    position: absolute;
+    background-color: #f9f9f9; /* 这就是你想要的 "白底" */
+    min-width: 300px;
+    box-shadow: 0px 8px 16px 0px grey;
+    z-index: 1;
+}
+
+/* ✅ 修复5: 修正老师的 "显示" 选择器 */
+/* li.dropbutton:hover div.dropdowncontent { */ /* <-- 老师的错误选择器 [user snippet, line 68] */
+li.dropbutton:hover .dropdowncontent { /* <-- 修正后的 */
+    display: block;
+}
+
+
+/* ✅ 修复6: 修正老师的 "链接" 选择器, 解决"白底白字"问题 */
+/* 通过在选择器前加上 "ul.nav", 我们提高了它的优先级, */
+/* 让它能覆盖上面 [user snippet, line 23] 的 "color: white" 规则 */
+
+
+/* li.dropbutton:hover div.dropdowncontent a:link { */ /* <-- 老师的原始选择器 [user snippet, line 72] */
+ul.nav li.dropbutton .dropdowncontent a:link { /* <-- 修正后的高优先级选择器 */
+color: #666; /* "灰色字" 成功显示 */
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+font-size: .6em;
+border-bottom: 1px solid #666;
+}
+
+/* li.dropbutton:hover div.dropdowncontent a:visited { */ /* <-- 老师的原始选择器 [user snippet, line 82] */
+ul.nav li.dropbutton .dropdowncontent a:visited { /* <-- 修正后的高优先级选择器 */
+color: #666;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+font-size: .6em;
+border-bottom: 1px solid #666;
+}
+
+/* li.dropbutton:hover div.dropdowncontent a:hover { */ /* <-- 老师的原始选择器 [user snippet, line 90] */
+ul.nav li.dropbutton .dropdowncontent a:hover { /* <-- 修正后的高优先级选择器 */
+color: white;
+background-color: #666;
+transition: background-color 0.2s ease-in;
+}
+
+
+body {
+    background-color: white;
+}
+
+/* (h1, p, h2, h3, figure, figcaption, blockquote 样式...) */
+h1 {
+    font-family: "GrotzecCond-Demibold", serif;
+    font-size: 48px;
+    line-height: 1.1;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding: 0 25%;
+}
+p {
+    font-family: "LeJeunePoster-Regular", sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    padding: 0 25%;
+}
+h2, h3 {
+    padding: 0 25%;
+    margin-bottom: 15px;
+    font-family: "GrotzecCond-Demibold", sans-serif;
+}
+h2 {
+    font-size: 24px;
+    margin-top: 30px;
+}
+h3 {
+    font-size: 18px;
+    margin-bottom: 25px;
+}
+
+h3 a {
+    color: #2961c2; /* 1. 改变链接颜色 (这里用了导航栏的蓝色) */
+    text-decoration: underline; /* 2. 添加下划线 */
+    transition: color 0.3s ease; /* 3. (推荐) 为悬浮效果添加平滑过渡 */
+}
+
+h3 a:hover {
+    color: #666; /* 鼠标悬浮时变为灰色 */
+}
+
+figure {
+    width: 60%;
+    margin: 0 auto;
+    text-align: left;
+}
+
+/* ---------------------- 图片宽度定制 ---------------------- */
+
+/* 第一张图：全屏宽度 */
+figure.full-bleed {
+    width: 100vw;
+    margin: 0;  
+    margin-left: 50%;
+    transform: translateX(-50%); 
+}
+
+figure.full-bleed img {
+    width: 100vw;
+    height: auto;
+    display: block;
+}
+
+/* 第二张图：正文宽度（与 p 一样的左右 padding） */
+figure.text-width {
+    max-width: 700px;
+    margin: 40px auto;
+    width: 100%;
+    padding: 0;     /* ← 必须取消 */
+    text-align: center;
+}
+
+figure.text-width img {
+    width: 100%;
+    height: auto;
+}
+
+figcaption {
+    font-family: "GrotzecCond-DemiboldItalic", sans-serif;
+    font-style: normal;
+    color: #666;
+    margin-top: 10px;
+    font-size: 14px;
+    width: 100%; 
+    padding-top: 5px;
+}
+
+/* Full-bleed 图片的 figcaption 居中显示 */
+figure.full-bleed figcaption {
+    max-width: 700px;        /* 和正文一样宽度 */
+    margin: 10px auto 0 auto; /* 自动左右居中 */
+    text-align: center;       /* 字体居中 */
+    padding: 0 20px;          /* 给一点左右空间（更好看） */
+}
+
+blockquote {
+    font-family: "GrotzecCond-DemiboldItalic", serif;
+    font-size: 28px;
+    line-height: 1.4;
+
+    /* 宽度 & 居中，与正文视觉一致 */
+    max-width: 700px;
+    margin: 40px auto;
+
+    /* 上下 30px；左 20px 给竖杠和文字留空隙；右 20px 保持平衡 */
+    padding: 30px 20px 30px 20px;
+
+    background-color: #f7f7f7;
+    border-left: 5px solid #000;
+}
+
+/* --- 左侧圆形小图 + 文本绕排 --- */
+.sunflower-side {
+    position: relative;
+}
+
+.sunflower-side .side-image {
+    float: left;                  /* 让文本绕排 */
+    width: 150px;                  /* 图片大小（你可以改 60–100px） */
+    height: 150px;
+    border-radius: 50%;           /* 变成圆形 */
+    object-fit: cover;            /* 保证圆内图案不变形 */
+    margin-right: 20px;           /* 图片和文字之间的空隙 */
+    margin-bottom: 10px;          /* 图片底部与文字的间距 */
+}
+
+
+/* ---------------------- INTRO SCENE STYLES ------------------------------------- */
+
+#intro-scene {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    z-index: 100; /* 1. 背景层 (在 Nav Bar 下面) */
+    background-color: white; 
+}
+
+#queue-container {
+    display: flex;
+    align-items: flex-end; 
+    transform: scale(1.5); 
+    position: relative; 
+    justify-content: center; 
+}
+
+#line-left, #line-right {
+    filter: blur(5px); 
+    height: 300px;
+    width: auto;
+    transition: filter 0.5s ease-out;
+}
+
+#hannah-container {
+    position: relative; 
+    width: auto;
+    height: 300px; 
+    z-index: 5;
+    margin: 0 40px 0 20px; 
+}
+#hannah-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: auto;
+}
+#hannah-bw {
+    z-index: 6; 
+    opacity: 1;
+    transition: opacity 0.5s ease-out; 
+}
+#hannah-color {
+    z-index: 5; 
+}
+
+#staff-image {
+    position: absolute;
+    height: 300px; 
+    width: auto;
+    bottom: 0; 
+    left: 50%; 
+    transform: translateX(90px); 
+    z-index: 10; 
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+    pointer-events: none;
+}
+#staff-image.is-visible {
+    opacity: 1;
+}
+
+
+/* ------------------ Staff 说话气泡 ------------------ */
+
+#staff-speech {
+    position: absolute;
+    /* 大概在 staff 头的右上方，你可以之后微调这两个值 */
+    bottom: 260px;
+    left: 65%;
+    
+    z-index: 11;
+    background: #ffffff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+
+    font-family: "GrotzecCond-Demibold", sans-serif; /* 同系列但非斜体 */
+    font-size: 16px;
+    color: #333;
+
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    white-space: nowrap;
+}
+
+/* 显示状态：由 JS 加 .is-visible */
+#staff-speech.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 尖角小三角形 */
+#staff-speech::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 25px;  /* 控制“小尾巴”和 staff 的连线位置 */
+    border-width: 10px 8px 0 8px;
+    border-style: solid;
+    border-color: #ffffff transparent transparent transparent;
+}
+
+
+
+/* ---------------------- SCROLLYTELLING TEXT STYLES ------------------------------------- */
+
+#scrollytelling-text {
+    min-height: 150vh; 
+    background-color: transparent; 
+    position: relative;
+    z-index: 101; /* 2. 文本层 */
+    
+    /* (这部分保留，为 Nav Bar 和 intro 留出空间) */
+    padding-top: calc(100vh + 70px); 
+}
+
+#story-wrapper {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    margin-top: 10vh; 
+}
+
+#scrollytelling-text .step {
+  position: sticky;
+  top: 50vh; 
+  width: 50%;
+  max-width: 700px;
+  margin: 0 auto;
+  margin-bottom: 100vh; 
+  padding: 40px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+  z-index: 100; 
+  padding-left: 40px !important;
+  padding-right: 40px !important;
+  transform: translateY(-50%);
+}
+
+#scrollytelling-text .step[data-step="lanyard"] {
+    opacity: 0; 
+    pointer-events: none;
+    margin-bottom: 20vh; 
+}
+
+
+/* ---------------------- 正文容器 ------------------------------------- */
+
+#main-content {
+    position: relative;
+    z-index: 102; /* 3. 正文层 */
+    background-color: white; 
+    
+    /* (这部分保留，为 Nav Bar 留出空间) */
+    padding-top: 0; 
+}
+
+
+/* ------------------------------------------------------------- */
+/* 挂绳和提示词的样式  */
+/* ------------------------------------------------------------- */
+
+#lanyard-click-area {
+    position: fixed;
+    top: calc(50vh - 265px); 
+    left: 50%;
+
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+    pointer-events: none;
+    
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    z-index: 103; 
+    cursor: pointer !important; 
+    
+    display: flex;
+    align-items: center;
+}
+
+#lanyard-click-area.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+}
+
+#lanyard-icon {
+    width: 80px; 
+    height: auto;
+    transition: transform 0.2s ease-out; 
+    flex-shrink: 0;
+}
+
+#click-prompt {
+    margin-left: 15px; 
+    font-family: "GrotzecCond-DemiboldItalic", sans-serif;
+    font-size: 16px;
+    color: #333;
+    background: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    white-space: nowrap;
+    animation: blink 1.5s infinite ease-in-out;
+}
+
+/* ------------------------------------------------------------- */
+/* 悬浮效果和闪烁动画 */
+/* ------------------------------------------------------------- */
+
+#lanyard-click-area:hover #lanyard-icon { 
+    transform: scale(1.1) translateY(-5px);
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* ================= 手机端布局（<= 600px） ================= */
+@media only screen and (max-width: 600px) {
+
+  /* 1. 正文宽一点，左右白边小一点 */
+  h1, h2, h3, p {
+    padding: 0 4% !important;
+  }
+  h1 { font-size: 28px !important; }
+  h2 { font-size: 20px !important; }
+  p  { font-size: 16px !important; }
+
+  /* 2. 手机上 SCROLLYTELLING 卡片不再 sticky，变成正常往上滚 */
+  #scrollytelling-text .step {
+    position: relative !important;
+    top: auto !important;
+    transform: none !important;
+
+    width: 92% !important;
+    max-width: none !important;
+    margin: 24px auto !important;
+
+    padding: 20px 16px !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,.1);
+  }
+
+  /* 3. lanyard 这个空白 step：控制 staff 出现的间隔和停留时间 */
+  #scrollytelling-text .step[data-step="lanyard"] {
+    height: 60vh !important;          /* 停留时间：越大看 staff 越久 */
+    margin: 32px auto !important;     /* 和前后两段的间距 */
+    opacity: 0 !important;            /* 自己不显示内容 */
+    pointer-events: none !important;
+  }
+
+  /* 4. intro 队伍稍微缩小，手机上能看到更多人 */
+  #queue-container {
+    transform: scale(0.8) !important;
+    transform-origin: center bottom !important;
+  }
+
+  #line-left,
+  #line-right,
+  #hannah-container,
+  #staff-image {
+    height: 220px !important;
+  }
+
+  #staff-image {
+    transform: translateX(40px) !important;
+  }
+
+  /* 5. 气泡位置稍微调一调，让文字不被遮住 */
+  #staff-speech {
+    bottom: 220px !important;
+    left: 55% !important;
+    font-size: 14px !important;
+  }
+
+  /* 6. lanyard 提示整体稍微往下放一点 */
+  #lanyard-click-area {
+    top: 22vh !important;
+  }
+}
+
+/* ====== BOUNDARIES 导航：左(☰) / 中(标题) / 右(占位) ====== */
+ul.nav{
+  /* 保留你原有的固定在顶部、全宽、颜色等属性 */
+  position: fixed;
+  top: 0; left: 0; width: 100%;
+  z-index: 200;
+  background-color: #000000;
+  color: #fff;
+  list-style: none;
+  margin: 0;
+  padding: 8px 8px;
+
+  /* 核心：三列网格，标题永远在正中 */
+  display: grid;
+  grid-template-columns: 44px 1fr 44px; /* 左右等宽列 */
+  align-items: center;
+  box-sizing: border-box;
+}
+
+ul.nav img.go-logo {
+  max-height: 35px;    /* ✅ 真正控制视觉大小 */
+  transform: scale(1.1);
+  margin-top: 6px;
+  user-select: none;       /* ✅ 禁止被选中 */
+}
+
+ul.nav li.logo a {
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 清掉旧的浮动/定位（双保险） */
+ul.nav li{ float:none; }
+ul.nav li.dropbutton, ul.nav li.logo{ position:static; left:auto; }
+
+/* 左列：汉堡 */
+ul.nav li.dropbutton{ grid-column:1; justify-self:start; }
+
+ul.nav li.dropbutton > a{
+  display:block; width:44px; text-align:left;
+  font-size:22px; text-decoration:none; color:#fff;
+}
+
+/* 中列：标题（真正几何居中） */
+ul.nav li.logo{ grid-column:2; justify-self:center; }
+ul.nav li.logo a{
+  display:block; font-weight:900; font-size:22px;
+  letter-spacing:.5px; text-decoration:none; color:#fff;
+}
+
+/* 右列：占位，保证左右对称 */
+ul.nav::after{
+  content:"";
+  grid-column:3; justify-self:end;
+  width:44px; height:1px; /* 透明占位 */
+}
+
+/* 桌面可稍微放大 */
+@media (min-width: 601px){
+  ul.nav{ grid-template-columns: 48px 1fr 48px; padding:10px 16px; }
+  ul.nav li.dropbutton > a{ width:48px; font-size:24px; }
+  ul.nav li.logo a{ font-size:26px; }
+  ul.nav::after{ width:48px; }
+}
