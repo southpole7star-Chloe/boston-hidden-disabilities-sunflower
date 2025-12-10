@@ -650,48 +650,53 @@ blockquote {
 }
 
 /* ========================================================= */
-/* 🚑 强力修复 SNO/Iframe 节奏问题 (最终调整版)               */
+/* 🛑 终极解决方案：IFRAME 专用（取消粘性，改为自然滚动）     */
 /* ========================================================= */
 
-/* 1. 针对所有步骤：基础设置 */
+/* 1. 针对所有步骤：取消 Sticky，让文字自然滚出屏幕 */
 body.is-embedded #scrollytelling-text .step {
-    background-color: rgba(255, 255, 255, 1) !important; 
+    /* 关键：取消粘性定位，防止“卡住”或“重叠” */
+    position: relative !important;
+    top: auto !important;
+    transform: none !important;
+    
+    /* 视觉样式 */
+    background-color: rgba(255, 255, 255, 1) !important;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
     z-index: 200 !important;
-    /* 默认给下方留出巨大空白，防止下一段追尾 */
-    margin-bottom: 120vh !important; 
+    
+    /* 间距：每段文字下面留出 80vh (大半个屏幕) 的空白 */
+    margin-bottom: 80vh !important;
 }
 
 /* 2. 第一段文字 (Step 1) */
 body.is-embedded #scrollytelling-text .step[data-step="1"] {
-    /* 它的下方不需要特别大，因为我们会用下一段的 margin-top 来推开 */
-    margin-bottom: 50vh !important; 
+    /* 给它下方加额外的距离，确保它滚得远远的，Lanyard 还没出来 */
+    margin-bottom: 100vh !important; 
 }
 
-/* 3. 中间那个看不见的 Lanyard 步骤 (关键修复) */
+/* 3. 中间那个看不见的 Lanyard 步骤 */
 body.is-embedded #scrollytelling-text .step[data-step="lanyard"] {
-    /* 🚀 核心修改：头部增加 100vh 的空白 */
-    /* 这意味着：Step 1 滚过去后，用户要滚过整整一个屏幕的空白，这个步骤才会进入触发区 */
-    margin-top: 100vh !important; 
+    /* 自身高度：决定了你在空白处停留多久来点击按钮 */
+    height: 150vh !important; 
     
-    /* 自身高度：决定了按钮在屏幕上停留多久供用户点击 */
-    height: 180vh !important; 
-    
+    /* 头部间距：再加 50vh 的保险距离 */
+    margin-top: 50vh !important; 
+    margin-bottom: 50vh !important;
+
     /* 保持不可见 */
     opacity: 0 !important; 
     pointer-events: none;
-    margin-bottom: 0 !important;
 }
 
 /* 4. 手机端 Iframe 微调 */
 @media only screen and (max-width: 600px) {
-    body.is-embedded #scrollytelling-text .step[data-step="lanyard"] {
-        /* 手机上头部空白稍微小一点，不然滚太累 */
-        margin-top: 80vh !important;
-        height: 120vh !important; 
-    }
-    
     body.is-embedded #scrollytelling-text .step {
+        /* 手机上间距稍微小一点 */
         margin-bottom: 80vh !important;
+    }
+    body.is-embedded #scrollytelling-text .step[data-step="lanyard"] {
+        height: 120vh !important; 
+        margin-top: 30vh !important;
     }
 }

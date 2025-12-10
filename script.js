@@ -140,18 +140,27 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- Resize ---
   window.addEventListener("resize", scroller.resize);
 
-  // --- Scroll Hint Logic: 一滚动就消失 ---
+  // --- Scroll Hint Logic: 直到看见全屏照片才消失 ---
   const scrollHint = document.getElementById('scroll-down-hint');
   
-  window.addEventListener('scroll', () => {
-    if (!scrollHint) return;
+  // 🎯 目标改为：正文区域（那里有全屏照片）
+  const mainContent = document.getElementById('main-content');
 
-    // 如果向下滚动超过 50px，就添加 hidden 类
-    if (window.scrollY > 50) {
+  window.addEventListener('scroll', () => {
+    if (!scrollHint || !mainContent) return;
+
+    const rect = mainContent.getBoundingClientRect();
+    
+    // rect.top 代表全屏照片距离屏幕顶部的距离
+    // window.innerHeight * 0.8 意味着：
+    // 当全屏照片从屏幕底部升上来，占据了屏幕 20% 的高度时（用户肯定看到照片了）
+    // 提示才会消失
+    if (rect.top < window.innerHeight * 0.8) {
       scrollHint.classList.add('hidden');
     } else {
-      // 如果回到顶部，再显示出来
+      // 如果往回滚，看不到照片了，提示重新出现
       scrollHint.classList.remove('hidden');
     }
   });
-});
+
+}); // <--- 结束括号
