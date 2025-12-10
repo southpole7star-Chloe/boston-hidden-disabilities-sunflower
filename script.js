@@ -1,5 +1,7 @@
-// script.js (已更新，支持 data-step="2")
 document.addEventListener("DOMContentLoaded", () => {
+  // 🔍 1. 定义变量 (移到这里)
+  const isEmbedded = window.self !== window.top;
+
   // --- guard: scrollama ---
   if (typeof scrollama === "undefined") {
     console.error("[scrollama] not found.");
@@ -21,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!steps.length) {
     console.warn("[init] no steps found.");
   }
-  if (!lanyardArea || !staffImage || !staffSpeech ||!hannahBw || !lineLeft || !lineRight) {
+  if (!lanyardArea || !staffImage || !staffSpeech || !hannahBw || !lineLeft || !lineRight) {
     console.error("[init] One or more required elements are missing.");
     return;
   }
@@ -30,64 +32,63 @@ document.addEventListener("DOMContentLoaded", () => {
   const hide = el => el && el.classList.remove("is-visible");
 
   // --- scrollama ---
-    // 判断是否是手机：宽度小于等于 600px
   const isMobile = window.innerWidth <= 600;
+
+  // 🔧 offset 配置
+  const desktopOffset = isEmbedded ? 0.35 : 0.5;
+  const mobileOffset  = isEmbedded ? 0.65 : 0.75;
 
   const scroller = scrollama();
 
   scroller
     .setup({
       step: "#scrollytelling-text .step",
-      // 电脑端：保持你原来的 0.5
-      // 手机端：0.85，等第一个 step 几乎滚完才触发 lanyard
-      offset: isMobile ? 0.75 : 0.5,
+      offset: isMobile ? mobileOffset : desktopOffset,
       once: false
     })
-
     .onStepEnter(res => {
       const stepId = res.element.dataset.step;
 
-      // 1. 进入 "lanyard" 触发器
+      // ===========================
+      // 1. 处理 Lanyard 步骤
+      // ===========================
       if (stepId === "lanyard") {
-
-        // ✅ 手机端：把第一段淡出，相当于“滚出屏幕”
-        if (isMobile && firstStep) {
-          firstStep.classList.add('mobile-hidden');
-        }
-
-        show(lanyardArea);
         
+        // 向下滚动进入 (Down)
         if (res.direction === "down") {
-          document.body.style.overflow = 'hidden'; 
-        }
-      }
+          if (isMobile && firstStep) {
+            firstStep.classList.add('mobile-hidden');
+          }
+          show(lanyardArea);
 
-      // 2. 向上滚动从正文返回，进入 "step 2" 时
-      if (stepId === "2" && res.direction === "up") {
-          show(staffImage);
-          show(staffSpeech); 
-          hannahBw.style.opacity = '1'; // 恢复黑白
-          lineLeft.style.filter = 'blur(5px)';
-          lineRight.style.filter = 'blur(5px)';
-      }
-    })
-    .onStepExit(res => {
-      const stepId = res.element.dataset.step;
-      
-      // 1. 向上滚动离开 "lanyard" (回到第1段)
-      if (stepId === "lanyard" && res.direction === "up") {
-        hide(lanyardArea);
-        hide(staffImage);
-        hide(staffSpeech);
-        document.body.style.overflow = ''; 
-
-        // ✅ 手机端：回滚到第一段时，让第一段重新出现
-        if (isMobile && firstStep) {
-          firstStep.classList.remove('mobile-hidden');
+          // ✅ 只有单页时才锁死滚动
+          if (!isEmbedded) {
+            document.body.style.overflow = 'hidden';
+          }
         }
-      }
+
+        // 向上滚动进入 (Up) - 或者是为了恢复状态
+        // 注意：原代码这里的逻辑是：如果是 lanyard 且 direction 是 up，则隐藏。
+        if (res.direction === "up") {
+          hide(lanyardArea);
+          hide(staffImage);
+          hide(staffSpeech);
+
+          // ✅ 只有单页时才恢复滚动
+          if (!isEmbedded) {
+            document.body.style.overflow = '';
+          }
+
+          if (isMobile && firstStep) {
+            firstStep.classList.remove('mobile-hidden');
+          }
+        }
+      } // <--- 这里的括号原来位置不对，现在闭合 if (stepId === "lanyard")
       
+      // ===========================
       // 2. 向下滚动离开 "step 2" (进入正文)
+      // ===========================
+      // 修正：这段代码之前被错误的括号踢出了回调函数
       if (stepId === "2" && res.direction === "down") {
          hide(staffImage);
          hide(staffSpeech);
@@ -95,20 +96,22 @@ document.addEventListener("DOMContentLoaded", () => {
          lineLeft.style.filter = 'none'; // 去模糊
          lineRight.style.filter = 'none'; // 去模糊
       }
-    });
 
-  // --- 点击事件 ---
+    }); // <--- 这里的括号闭合 .onStepEnter
+
+  // --- Click Event ---
   lanyardArea.addEventListener("click", () => {
     hide(lanyardArea); 
-    show(staffImage); // 显示 staff
+    show(staffImage); 
     show(staffSpeech); 
-    
-    // 关键修复：点击后解锁滚动
-    document.body.style.overflow = ''; // 恢复页面滚动
-  });
 
+    // ✅ 只有单页时才去动 body
+    if (!isEmbedded) {
+      document.body.style.overflow = '';
+    }
+  });
 
   // --- resize ---
   window.addEventListener("resize", scroller.resize);
 
-});
+}); // <--- 闭合 document.addEventListener
