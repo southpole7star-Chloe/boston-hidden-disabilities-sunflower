@@ -650,31 +650,52 @@ blockquote {
 }
 
 /* ========================================================= */
-/* 🚀 智能 IFRAME 修复：只有在 SNO/Iframe 里才生效           */
+/* 🚑 强力修复 SNO/Iframe 重叠与穿帮问题 (最终修正版)          */
 /* ========================================================= */
 
-/* 只有当 body 有 'is-embedded' 这个 class 时（即在 iframe 里），才执行下面的拉长操作 */
+/* 1. 针对所有步骤：在 iframe 里暴力增加间距 */
+body.is-embedded #scrollytelling-text .step {
+    /* 关键：每个文字块下面都留出巨大的空白(1.2个屏幕高) */
+    /* 这样上一段滚出屏幕后，下一段还在很远的地方，就不会重叠 */
+    margin-bottom: 120vh !important; 
+    
+    /* 确保背景是纯白不透明，万一重叠也能盖住下面的 */
+    background-color: rgba(255, 255, 255, 1) !important; 
+    
+    /* 增加阴影，让层次更分明 */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+    
+    /* 稍微提高层级 */
+    z-index: 200 !important;
+}
 
-/* 1. Desktop (Iframe 环境) */
+/* 2. 针对中间那个看不见的 Lanyard 步骤 */
 body.is-embedded #scrollytelling-text .step[data-step="lanyard"] {
-    /* 只有在 iframe 里，我们才需要这个 180vh 的超长缓冲区 */
-    /* 在正常单页里，它会保持原本的样式 (不可见且不占太高位置)，由 JS 负责锁屏 */
-    height: 180vh !important; 
-    margin-bottom: 0 !important;
-    opacity: 0; 
+    /* 这个高度决定了你在中间“卡住”多久来点击按钮 */
+    height: 200vh !important; 
+    
+    /* 保持不可见 */
+    opacity: 0 !important; 
+    margin-bottom: 0 !important; /* 它的下方不需要额外边距，因为它是空的 */
     pointer-events: none;
 }
 
-/* 2. 调整 Step 1 的边距 (仅 Iframe 环境) */
+/* 3. 特别针对第一段：给它更夸张的下边距 */
 body.is-embedded #scrollytelling-text .step[data-step="1"] {
-    /* 在 iframe 里为了衔接顺畅，稍微缩短下边距 */
-    margin-bottom: 10vh !important;
+    /* 这保证第一段完全滚出屏幕很久之后，第二段才会露头 */
+    margin-bottom: 150vh !important; 
 }
 
-/* 3. Mobile (Iframe 环境) */
+/* 4. 手机端 Iframe 的特殊调整 */
 @media only screen and (max-width: 600px) {
     body.is-embedded #scrollytelling-text .step[data-step="lanyard"] {
+        /* 手机上稍微短一点，不然滑太久 */
         height: 120vh !important; 
         margin: 0 auto !important;
+    }
+    
+    body.is-embedded #scrollytelling-text .step {
+        /* 手机上间距稍微小一点，但也需要足够大 */
+        margin-bottom: 100vh !important;
     }
 }

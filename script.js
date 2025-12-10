@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .setup({
       step: "#scrollytelling-text .step",
       // 手机端稍微晚一点触发，避免文字还没读完就变了
-      offset: isMobile ? 0.75 : 0.5,
+      offset: isEmbedded ? 0.95 : (isMobile ? 0.75 : 0.5),
       once: false // 关键：允许反复触发
     })
     .onStepEnter(res => {
