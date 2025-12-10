@@ -173,7 +173,48 @@
   }
 }
 
+/* --- 页面底部滚动提示 --- */
+#scroll-down-hint {
+    position: fixed; /* 固定定位，始终显示在窗口底部 */
+    bottom: 20px;    /* 距离底部 20px */
+    left: 50%;       /* 水平居中 */
+    transform: translateX(-50%);
+    text-align: center;
+    color: #333;     /* 字体颜色，可根据需要调整 */
+    font-family: "GrotzecCond-DemiboldItalic", sans-serif; /* 使用现有字体 */
+    font-size: 16px;
+    z-index: 1000;   /* 确保在最上层 */
+    cursor: pointer; /* 鼠标悬停时显示手型 */
+    animation: blink-animation 1.5s infinite ease-in-out; /* 应用闪烁动画 */
+}
 
+#scroll-down-hint span {
+    display: block; /* 让文字和箭头分行显示 */
+}
+
+#scroll-down-hint .arrow {
+    font-size: 24px; /* 箭头大一点 */
+    margin-top: 5px;
+}
+
+/* --- 闪烁动画关键帧 --- */
+@keyframes blink-animation {
+    0%, 100% {
+        opacity: 1; /* 完全不透明 */
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        opacity: 0.4; /* 半透明 */
+        transform: translateX(-50%) translateY(5px); /* 轻微向下移动 */
+    }
+}
+
+#scroll-down-hint.hidden {
+    opacity: 0 !important;       /* 强制隐藏 */
+    pointer-events: none;        /* 隐藏后不可点击 */
+    transition: opacity 0.5s ease; /* 平滑淡出 */
+    animation: none;             /* 停止闪烁动画，防止冲突 */
+}
 
 
 /* ----------------------  SITE STYLES  ------------------------------------- */
@@ -608,4 +649,32 @@ blockquote {
   }
 }
 
+/* ========================================================= */
+/* 🚀 智能 IFRAME 修复：只有在 SNO/Iframe 里才生效           */
+/* ========================================================= */
 
+/* 只有当 body 有 'is-embedded' 这个 class 时（即在 iframe 里），才执行下面的拉长操作 */
+
+/* 1. Desktop (Iframe 环境) */
+body.is-embedded #scrollytelling-text .step[data-step="lanyard"] {
+    /* 只有在 iframe 里，我们才需要这个 180vh 的超长缓冲区 */
+    /* 在正常单页里，它会保持原本的样式 (不可见且不占太高位置)，由 JS 负责锁屏 */
+    height: 180vh !important; 
+    margin-bottom: 0 !important;
+    opacity: 0; 
+    pointer-events: none;
+}
+
+/* 2. 调整 Step 1 的边距 (仅 Iframe 环境) */
+body.is-embedded #scrollytelling-text .step[data-step="1"] {
+    /* 在 iframe 里为了衔接顺畅，稍微缩短下边距 */
+    margin-bottom: 10vh !important;
+}
+
+/* 3. Mobile (Iframe 环境) */
+@media only screen and (max-width: 600px) {
+    body.is-embedded #scrollytelling-text .step[data-step="lanyard"] {
+        height: 120vh !important; 
+        margin: 0 auto !important;
+    }
+}

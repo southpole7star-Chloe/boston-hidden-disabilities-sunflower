@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   // 1. 定义环境变量
   const isEmbedded = window.self !== window.top;
+  
+  // 👉 新增：如果是 iframe，给 body 加个 class 标记
+  if (isEmbedded) {
+    document.body.classList.add('is-embedded');
+  }
   const isMobile = window.innerWidth <= 600;
 
   // --- guard: scrollama ---
@@ -134,4 +139,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Resize ---
   window.addEventListener("resize", scroller.resize);
+
+  // --- Scroll Hint Logic: 一滚动就消失 ---
+  const scrollHint = document.getElementById('scroll-down-hint');
+  
+  window.addEventListener('scroll', () => {
+    if (!scrollHint) return;
+
+    // 如果向下滚动超过 50px，就添加 hidden 类
+    if (window.scrollY > 50) {
+      scrollHint.classList.add('hidden');
+    } else {
+      // 如果回到顶部，再显示出来
+      scrollHint.classList.remove('hidden');
+    }
+  });
 });
